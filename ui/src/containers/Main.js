@@ -1,7 +1,7 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {withStyles} from '@material-ui/core/styles';
 import React from 'react';
-// import NavBar from '../components/NavBar';
+import NavBar from '../components/NavBar';
 import AppRouter from './../routers/AppRouter';
 import Footer from './Footer';
 import Section from '../components/common/Section';
@@ -18,7 +18,7 @@ class Main extends React.Component {
     return (
       <React.Fragment>
         <CssBaseline />
-        {/* <NavBar /> */}
+        <NavBar />
         <Section className={classes.main}>
           <AppRouter />
         </Section>
