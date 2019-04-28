@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login Page</title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+</head>
+<body>
+	<div id="container">
+		<form name="loginForm" id="loginForm" action="/user/login" method="POST">
+			<div id="usernameData">
+				<label for="username">Username</label>
+				<input type="text" name="username" id="username" placeholder="Enter username"></input>
+			</div>
+			<div id="passwordData">
+				<label for="password">Password</label>
+				<input type="password" name="password" id="password" placeholder="Enter password"></input>
+			</div>
+			<div id="replyText">
+			</div>
+			<div id="actionButtons">
+				<input type="submit" onclick="login(); return false;" value="Login"></input>
+				<input type="button" onclick="javascript:window.location.href='/index.html'" value="Cancel"></input>
+				<br/><br/>
+				<input type="button" onclick="javascript:window.location.href='/user/register.html'" value="Go To Register Page"></input>
+			</div>
+		</form>
+	</div>
+	<script>
+		function login() {
+			var username = document.getElementById("username").value;
+			var password = document.getElementById("password").value;
+			
+			var XHR = new XMLHttpRequest();
+			var input = {
+				"username": username,
+				"password": password
+			};
+			input = JSON.stringify(input);
+
+			// Define what happens on successful data submission
+			XHR.addEventListener('load', function(event) {
+				console.log(XHR);
+				if (XHR.status==403) {
+					document.getElementById("replyText").innerHTML = '<span style="color: red">Invalid username and password</span>';
+				} else if (XHR.status==200) {
+					document.getElementById("replyText").innerHTML = 'Token= '+XHR.responseText;
+				} else {
+					document.getElementById("replyText").innerHTML = '<span style="color: red">status='+status+'. message='+XHR.responseText+'</span>';
+				}
+			});
+
+			  // Define what happens in case of error
+			XHR.addEventListener('error', function(event) {
+				document.getElementById("replyText").innerHTML = 'Oops! Something goes wrong.';
+			});
+
+			// Set up our request
+			XHR.open('POST', '/user/login');
+
+			// Add the required HTTP header for form data POST requests
+			XHR.setRequestHeader('Content-Type', 'application/json');
+
+			// Finally, send our data.
+			XHR.send(input);
+		}
+	</script>
+</body>
+</html>
