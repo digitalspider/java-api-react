@@ -16,7 +16,6 @@ const styles = {
 
 class Main extends React.Component {
   render() {
-    let theme = getAgencyTheme();
     let url = `${window.location.origin}${theme.favicon}`;
     const {classes} = this.props;
     return (
