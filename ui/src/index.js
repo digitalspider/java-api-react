@@ -6,8 +6,10 @@ import './index.css';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 // import {Provider} from 'mobx-react';
 // import Notifier from './components/Notifier';
-import theme from './utils/theme';
+import getTheme from './theme';
 import {BrowserRouter} from 'react-router-dom/cjs/react-router-dom';
+
+let theme = getTheme();
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
