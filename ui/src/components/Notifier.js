@@ -45,7 +45,7 @@ class Notifier extends React.Component {
   };
 
   render() {
-    let {classes} = this.props;
+    const {classes} = this.props;
 
     // Define snack attributes based on type
     let snackProps = {icon: ''};

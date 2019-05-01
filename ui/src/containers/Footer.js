@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
 function Footer() {
-  let currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
   return (
     <Typography variant="body1" align="center">
       &copy; digitalspider.com.au {currentYear}

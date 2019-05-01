@@ -1,4 +1,4 @@
-let common = {
+const common = {
 
   // List of messages
   message: {

@@ -36,11 +36,11 @@ const styles = (theme) => ({
 class DataTable extends Component {
   constructor(props) {
     super(props);
-    let headers = props.headers.map(header => {
+    const headers = props.headers.map((header) => {
       return {
         'id': _.camelCase(header),
         'name': header,
-      }
+      };
     });
 
     this.state = {
@@ -68,7 +68,7 @@ class DataTable extends Component {
   /* Case insensitive/natural order sorting  */
   sortData = (data, orderBy, order) => {
     return _.orderBy(
-      data,
+        data,
       orderBy === 'createdDate'
         ? orderBy
         : [(data) => data[orderBy].toLowerCase()],
@@ -79,7 +79,7 @@ class DataTable extends Component {
   createSortEvent = (property) => (event) => {
     // Can't sort the actions column
     if (property === 'actions') {
-     return;
+      return;
     }
 
     const orderBy = property;
@@ -89,7 +89,7 @@ class DataTable extends Component {
       order = this.state.order === 'desc' ? order : 'desc';
     }
 
-    let data = this.sortData(this.state.data, orderBy, order);
+    const data = this.sortData(this.state.data, orderBy, order);
     this.setState({data, order, orderBy});
   };
 
@@ -102,8 +102,8 @@ class DataTable extends Component {
   };
 
   render() {
-    let {classes} = this.props;
-    let {
+    const {classes} = this.props;
+    const {
       data,
       page,
       rowsPerPage,
@@ -145,18 +145,18 @@ class DataTable extends Component {
             </TableHead>
             <TableBody>
               {data
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((item) => (
-                  <DataRow
-                    key={item.recuid}
-                    data={item}
-                    isEditable={this.props.title !== 'Completed'
-                    }
-                  />
-                ))}
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((item) => (
+                    <DataRow
+                      key={item.recuid}
+                      data={item}
+                      isEditable={this.props.title !== 'Completed'
+                      }
+                    />
+                  ))}
             </TableBody>
           </Table>
-          {paginate && 
+          {paginate &&
           <TablePagination
             component="div"
             count={data.length}

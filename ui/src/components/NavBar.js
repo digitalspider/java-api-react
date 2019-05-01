@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Typography from '@material-ui/core/Typography';
 import {withStyles} from '@material-ui/core/styles';
-import { Link } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
+import {Link} from '@material-ui/core';
+import {Link as RouterLink} from 'react-router-dom';
 
 const styles = (theme) => ({
   navbar: {
@@ -11,23 +11,24 @@ const styles = (theme) => ({
     marginBottom: 15,
   },
   title: {
-    textDecoration: 'none',
-    cursor: 'pointer',
+    'textDecoration': 'none',
+    'cursor': 'pointer',
     '&:hover': {
-      textDecoration: 'none',
+      'textDecoration': 'none',
     },
-  }
+  },
 });
 
 class NavBar extends Component {
   render() {
-    let {classes} = this.props;
+    const {classes} = this.props;
     return (
-        <div id="navbar" className={classes.navbar}>
-          <Typography variant="h4" gutterBottom>
-          <Link component={RouterLink} to="/" className={classes.title}>NavBar</Link>
-          </Typography>
-        </div>
+      <div id="navbar" className={classes.navbar}>
+        <Typography variant="h4" gutterBottom>
+          <Link component={RouterLink} to="/"
+            className={classes.title}>NavBar</Link>
+        </Typography>
+      </div>
     );
   }
 }

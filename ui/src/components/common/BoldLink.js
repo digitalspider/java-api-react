@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 
 const styles = (theme) => ({
   textLink: {
-    textDecoration: 'none',
-    fontWeight: 600,
-    color: theme.palette.common.black,
-    cursor: 'pointer',
+    'textDecoration': 'none',
+    'fontWeight': 600,
+    'color': theme.palette.common.black,
+    'cursor': 'pointer',
     '&:hover': {
       color: 'rgba(0, 0, 0, 0.7)',
       textDecoration: 'underline',

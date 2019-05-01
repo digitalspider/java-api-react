@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 // import {inject, observer} from 'mobx-react';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Section from './common/Section';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DataTable from './DataTable';
-import { Link } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
+import {Link} from '@material-ui/core';
+import {Link as RouterLink} from 'react-router-dom';
 
 const styles = (theme) => ({
   section: {
@@ -43,7 +43,8 @@ class LandingPage extends Component {
             | <Link component={RouterLink} to='/user'>User Page</Link>
             | <Link component={RouterLink} to='/article'>Article Page</Link>
             </Typography>
-            <DataTable title="Articles" paginateAlways={true} data={[]} headers={['Article Name','Status','Creator','Created Date']}/>
+            <DataTable title="Articles" paginateAlways={true} data={[]}
+              headers={['Article Name', 'Status', 'Creator', 'Created Date']}/>
           </div>
           )
         }
