@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 /**
  * Get {@link #getBaseUrl()} and append environment property
  * REACT_APP_API_URL_PATH to it.
@@ -29,4 +31,9 @@ export function getBaseApiUrl(
       return baseUrl;
     }
     return window.location.protocol+'//'+hostname;
+  }
+
+
+  export function formatDate(date, format) {
+    return date ? moment(date).format(format) : 'N/A';
   }
