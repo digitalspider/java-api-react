@@ -7,12 +7,11 @@ import { Link as RouterLink } from 'react-router-dom';
 const styles = (theme) => ({
   navbar: {
     color: theme.palette.secondary.main,
-    backgroundColor: 'lightpink', // theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.navbar,
     marginBottom: 15,
   },
   title: {
     textDecoration: 'none',
-    color: theme.palette.primary.black,
     cursor: 'pointer',
     '&:hover': {
       textDecoration: 'none',

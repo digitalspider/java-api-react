@@ -24,8 +24,8 @@ const EditButton = ({className, classes, onClick}) => {
       className={`${className} ${classes.button}`}
       onClick={onClick}
     >
-      Edit
       <EditIcon className={classes.icon}/>
+      Edit
     </Typography>
   );
 };

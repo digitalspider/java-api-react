@@ -2,21 +2,24 @@ import {createMuiTheme} from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
   palette: {
-    primary: {
-      light: '#abcdef',
-      main: '#123456',
-      dark: '#001122',
+    primary: { // bluish
+      light: '#8889e2',
+      main: '#2b2da0',
+      dark: '#05064c',
       100: '#223344',
+      navbar: 'lightpink',
+      contrastText: '#ededf2',
     },
-    secondary: {
-      light: '#00000',
-      main: '#FFF',
-      dark: '#6c6c6c',
-      contrastText: '#515151',
+    secondary: { // greenish
+      light: '#a9f2bb',
+      main: '#1d7232',
+      dark: '#32f262',
+      contrastText: '#ededf2',
     },
   },
   typography: {
     fontFamily: 'Ariel',
+    fontSize: 14,
   },
   overrides: {
     MuiCircularProgress: {

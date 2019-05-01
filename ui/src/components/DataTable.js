@@ -24,7 +24,6 @@ const styles = (theme) => ({
     fontSize: 24,
     marginBottom: 15,
   },
-  // below format will be updated when design is ready
   csvLink: {
     color: '#a4a4a4',
     textDecoration: 'none',
