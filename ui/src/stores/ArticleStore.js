@@ -1,4 +1,4 @@
-import {observable, toJS, decorate} from 'mobx';
+import {observable, toJS, decorate, action} from 'mobx';
 import Api from '../utils/Api';
 import _ from 'lodash';
 import {getBaseApiUrl} from '../utils/helper';
@@ -60,6 +60,11 @@ class ArticleStore {
     });
   }
 
+  async getArticles() {
+    let result = await Api.get(URL + '/');
+    return result.data;
+  }
+
   createArticle(article) {
     return Api.post(URL, article);
   }
@@ -113,6 +118,9 @@ decorate(ArticleStore, {
   title: observable,
   content: observable,
   articleStatus: observable,
+  getArticle: action,
+  getArticles: action,
+  getArticleStatuses: action,
 });
 
 export default ArticleStore;

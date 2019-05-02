@@ -1,6 +1,6 @@
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
-import LandingPage from '../containers/LandingPage';
+import ArticleList from '../containers/ArticleList';
 import UserPage from '../containers/UserPage';
 import ArticlePage from '../containers/ArticlePage';
 
@@ -12,7 +12,7 @@ const MainRouter = () => (
   <Switch>
     <Route path="/user" component={UserPage}/>
     <Route path="/article" component={ArticlePage}/>
-    <Route path="/" component={LandingPage}/>
+    <Route path="/" component={ArticleList}/>
     <Route component={Error404} />
   </Switch>
 );

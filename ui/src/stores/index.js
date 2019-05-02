@@ -1,9 +1,9 @@
 import notifier from './NotifierStore';
-import article from './ArticleStore';
+import articles from './ArticleStore';
 
 const stores = {
   notifier,
-  article,
+  articles,
 };
 
 export default stores;

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-// import {inject, observer} from 'mobx-react';
+import {inject, observer} from 'mobx-react';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Section from '../components/common/Section';
@@ -14,36 +14,40 @@ const styles = (theme) => ({
   },
 });
 
-// @inject('articles', 'users')
-// @observer
-class LandingPage extends Component {
+class ArticleList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      articles: {},
       fetchComplete: false,
     };
   }
 
   componentDidMount() {
+    console.log(this.props.articles);
     Promise.all([
-      // this.props.articles.all(),
+      // this.props.articles.getArticles(),
       // this.props.users.all(),
-    ]).then(() => this.setState({fetchComplete: true}));
+    ]).then((articles) => {
+      this.setState({articles: articles});
+      this.setState({fetchComplete: true});
+    });
   }
 
   render() {
     const {classes} = this.props;
+    const {articles} = this.state;
     return (
       <Section className={classes.section}>
         {!this.state.fetchComplete ?
           ( <CircularProgress /> ) :
           ( <div id="page">
             <Typography variant="h4" gutterBottom>
-            Landing Page
+            Article List Page
             | <Link component={RouterLink} to='/user'>User Page</Link>
             | <Link component={RouterLink} to='/article'>Article Page</Link>
             </Typography>
-            <DataTable title="Articles" paginateAlways={true} data={[]}
+            <DataTable title="Articles" paginateAlways={true} data={articles}
               headers={['Article Name', 'Status', 'Creator', 'Created Date']}/>
           </div>
           )
@@ -53,4 +57,4 @@ class LandingPage extends Component {
   }
 }
 
-export default withStyles(styles)(LandingPage);
+export default inject('articles')(observer(withStyles(styles)(ArticleList)));
