@@ -37,10 +37,8 @@ const styles = {
   },
 };
 
-@inject('notifier')
-@observer
 class Notifier extends React.Component {
-  handleClose = () => {
+  handleClose() {
     this.props.notifier.handleClose();
   };
 
@@ -78,13 +76,13 @@ class Notifier extends React.Component {
       >
         <div className={classes.snackContent}>
           <div className={classes.snackContentHead}>
-            <Typography variant='title' className={classes.snackHead}>
+            <Typography variant='h6' className={classes.snackHead}>
               {snackProps.icon} {this.props.notifier.title}
             </Typography>
           </div>
           <div className={classes.snackContentMessage}>
             {this.props.notifier.content.map((message) => (
-              <Typography className={classes.snackMessage} key={message}>
+              <Typography variant='body1' className={classes.snackMessage} key={message}>
                 {message}
               </Typography>
             ))}
@@ -95,4 +93,6 @@ class Notifier extends React.Component {
   }
 }
 
-export default withStyles(styles)(Notifier);
+// const Notifier = inject("notifier")(observer(_Notifier));
+export default inject("notifier")(observer(withStyles(styles)(Notifier)));
+// export default withStyles(styles)(Notifier);

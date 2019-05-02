@@ -59,14 +59,18 @@ class DataTable extends Component {
     this.getData();
   }
 
-  getData = () => {
+  /**
+   * Load property data into the state
+   * and setup paginate.
+   */
+  getData() {
     this.setState({data: toJS(this.props.data)});
     this.setState({paginate:
       this.state.paginate || this.state.data.length > this.state.rowsPerPage});
   };
 
   /* Case insensitive/natural order sorting  */
-  sortData = (data, orderBy, order) => {
+  sortData(data, orderBy, order) {
     return _.orderBy(
         data,
       orderBy === 'createdDate'
@@ -93,11 +97,11 @@ class DataTable extends Component {
     this.setState({data, order, orderBy});
   };
 
-  handleChangePage = (event, page) => {
+  handleChangePage(event, page) {
     this.setState({page});
   };
 
-  handleChangeRowsPerPage = (event) => {
+  handleChangeRowsPerPage(event) {
     this.setState({rowsPerPage: event.target.value});
   };
 
@@ -116,7 +120,7 @@ class DataTable extends Component {
 
     return (
       <React.Fragment>
-        <Typography variant="title" className={classes.title}>
+        <Typography variant="h6" className={classes.title}>
           {this.props.title}
         </Typography>
         <Paper className={classes.root}>
