@@ -93,6 +93,4 @@ class Notifier extends React.Component {
   }
 }
 
-// const Notifier = inject("notifier")(observer(_Notifier));
 export default inject("notifier")(observer(withStyles(styles)(Notifier)));
-// export default withStyles(styles)(Notifier);
