@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 // import {inject, observer} from 'mobx-react';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Section from './common/Section';
+import Section from '../components/common/Section';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = (theme) => ({
@@ -11,9 +11,9 @@ const styles = (theme) => ({
   },
 });
 
-// @inject('users')
+// @inject('article')
 // @observer
-class UserPage extends Component {
+class ArticlePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,7 +23,7 @@ class UserPage extends Component {
 
   componentDidMount() {
     Promise.all([
-      // this.props.users.all(),
+      // this.props.articles.all(),
     ]).then(() => this.setState({fetchComplete: true}));
   }
 
@@ -35,7 +35,7 @@ class UserPage extends Component {
           ( <CircularProgress /> ) :
           ( <div id="page">
             <Typography variant="h4" gutterBottom>
-            User Page
+            Article Page
             </Typography>
           </div>
           )
@@ -45,4 +45,4 @@ class UserPage extends Component {
   }
 }
 
-export default withStyles(styles)(UserPage);
+export default withStyles(styles)(ArticlePage);

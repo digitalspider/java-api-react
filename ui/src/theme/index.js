@@ -5,7 +5,11 @@ import _ from 'lodash';
 
 const getTheme = (customTheme) => {
   const newTheme = customTheme ? customTheme : themeDefault;
-  return createMuiTheme(_.merge({}, themeCommon, newTheme));
+  return createMuiTheme(_.merge({}, {
+    typography: {
+      useNextVariants: true,
+    },
+  }, themeCommon, newTheme));
 };
 
 export default getTheme;

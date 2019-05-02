@@ -2,11 +2,8 @@ import React, {Component} from 'react';
 // import {inject, observer} from 'mobx-react';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Section from './common/Section';
+import Section from '../components/common/Section';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import DataTable from './DataTable';
-import {Link} from '@material-ui/core';
-import {Link as RouterLink} from 'react-router-dom';
 
 const styles = (theme) => ({
   section: {
@@ -14,9 +11,9 @@ const styles = (theme) => ({
   },
 });
 
-// @inject('articles', 'users')
+// @inject('users')
 // @observer
-class LandingPage extends Component {
+class UserPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,7 +23,6 @@ class LandingPage extends Component {
 
   componentDidMount() {
     Promise.all([
-      // this.props.articles.all(),
       // this.props.users.all(),
     ]).then(() => this.setState({fetchComplete: true}));
   }
@@ -39,12 +35,8 @@ class LandingPage extends Component {
           ( <CircularProgress /> ) :
           ( <div id="page">
             <Typography variant="h4" gutterBottom>
-            Landing Page
-            | <Link component={RouterLink} to='/user'>User Page</Link>
-            | <Link component={RouterLink} to='/article'>Article Page</Link>
+            User Page
             </Typography>
-            <DataTable title="Articles" paginateAlways={true} data={[]}
-              headers={['Article Name', 'Status', 'Creator', 'Created Date']}/>
           </div>
           )
         }
@@ -53,4 +45,4 @@ class LandingPage extends Component {
   }
 }
 
-export default withStyles(styles)(LandingPage);
+export default withStyles(styles)(UserPage);

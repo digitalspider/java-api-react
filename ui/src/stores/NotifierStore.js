@@ -3,7 +3,7 @@ import {observable, action, decorate} from 'mobx';
 /*
  * Store implemented to handle snack notifications
  */
-class Notifier {
+class NotifierStore {
   title = '';
   content = [];
   icon = '';
@@ -42,7 +42,7 @@ class Notifier {
   }
 }
 
-decorate(Notifier, {
+decorate(NotifierStore, {
   title: observable,
   content: observable,
   open: observable,
@@ -55,4 +55,4 @@ decorate(Notifier, {
   displayWarning: action,
 });
 
-export default new Notifier();
+export default new NotifierStore();

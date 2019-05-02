@@ -22,7 +22,7 @@ const DataRow = ({data, classes, isEditable}) => (
       className={classes.trafficLight}
       style={{borderLeftColor: data.trafficLightColor}}
     >
-      <BoldLink to={`/article/${data.recuid}`}>
+      <BoldLink to={`/article/${data.id}`}>
         {data.name}
       </BoldLink>
     </TableCell>

@@ -1,8 +1,8 @@
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
-import LandingPage from '../components/LandingPage';
-import UserPage from '../components/UserPage';
-import ArticlePage from '../components/ArticlePage';
+import LandingPage from '../containers/LandingPage';
+import UserPage from '../containers/UserPage';
+import ArticlePage from '../containers/ArticlePage';
 
 const Error404 = () => {
   return <h3>Route not found</h3>;

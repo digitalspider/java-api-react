@@ -1,19 +1,18 @@
-import Storage from './../utils/Storage';
-import {observable} from 'mobx';
-import Notifier from './Notifier';
-import common from './../common';
+import Storage from './Storage';
+import {observable, decorate} from 'mobx';
+import Notifier from '../stores/NotifierStore';
+import common from '../common';
 import createBrowserHistory from 'history/createBrowserHistory';
-import Auth from '../utils/Auth';
 const history = createBrowserHistory({forceRefresh: true});
 
 class Api {
-  @observable redirectToLogin = false;
-  @observable redirectCounter = 0;
+  redirectToLogin = false;
+  redirectCounter = 0;
 
   constructor() {
     this.headers = new Headers();
     this.headers.append('Content-Type', 'application/json');
-    this.headers.append('AuthToken', null);
+    this.headers.append('Authorization', null);
     // Force no-cache for IE11 to prevent stale data
     this.headers.append('Cache-Control', 'no-store');
     this.headers.append('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -22,7 +21,7 @@ class Api {
   }
 
   async delete(url) {
-    this.headers.set('AuthToken', Storage.getSessionAttr('token'));
+    this.headers.set('Authorization', Storage.getSessionAttr('token'));
     let options = {
       method: 'DELETE',
       headers: this.headers,
@@ -33,7 +32,7 @@ class Api {
   }
 
   async get(url) {
-    this.headers.set('AuthToken', Storage.getSessionAttr('token'));
+    this.headers.set('Authorization', Storage.getSessionAttr('token'));
     let options = {
       method: 'GET',
       headers: this.headers,
@@ -43,11 +42,8 @@ class Api {
     return this.parseResponse(response, result);
   }
 
-  async post(url, data, userToken) {
-    this.headers.set('AuthToken', Storage.getSessionAttr('token'));
-    if (userToken) {
-      this.headers.set('UserToken', userToken);
-    }
+  async post(url, data) {
+    this.headers.set('Authorization', Storage.getSessionAttr('token'));
     let options = {
       method: 'POST',
       body: data ? JSON.stringify(data) : '',
@@ -60,7 +56,7 @@ class Api {
   }
 
   async put(url, data) {
-    this.headers.set('AuthToken', Storage.getSessionAttr('token'));
+    this.headers.set('Authorization', Storage.getSessionAttr('token'));
     let options = {
       method: 'PUT',
       body: JSON.stringify(data),
@@ -76,7 +72,7 @@ class Api {
   async postFile(url, formData) {
     // Headers have got to be redefined
     let headers = new Headers();
-    headers.append('AuthToken', Storage.getSessionAttr('token'));
+    headers.append('Authorization', Storage.getSessionAttr('token'));
     let options = {
       method: 'POST',
       headers: headers,
@@ -111,12 +107,13 @@ class Api {
 
     // When Unauthorized, redirect to the sso login URL
     if (response.status === 401) {
-      Auth.removeSession();
+      const expireInHours = 1;
       Storage.setCookie(
-        'campaignReferrer',
-        document.location.href.split(document.location.origin)[1]
+        'referrer',
+        document.location.href.split(document.location.origin)[1],
+        expireInHours
       );
-      let url = '/login/?unauthorized=true';
+      let url = '/login';
       history.push(url);
     }
 
@@ -128,5 +125,10 @@ class Api {
     };
   }
 }
+
+decorate(Api, {
+  redirectToLogin: observable,
+  redirectCounter: observable,
+});
 
 export default new Api();

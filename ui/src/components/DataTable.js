@@ -152,7 +152,7 @@ class DataTable extends Component {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((item) => (
                     <DataRow
-                      key={item.recuid}
+                      key={item.id}
                       data={item}
                       isEditable={this.props.title !== 'Completed'
                       }
