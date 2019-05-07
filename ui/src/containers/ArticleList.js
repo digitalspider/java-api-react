@@ -24,12 +24,15 @@ class ArticleList extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.articles);
     Promise.all([
       this.props.articles.getArticles(),
       // this.props.users.all(),
     ]).then((articles) => {
       this.setState({articles: articles});
+      this.setState({fetchComplete: true});
+    }).catch((err) => {
+      console.log(`Error getting ArticleList data: ${err}`);
+      this.setState({articles: []});
       this.setState({fetchComplete: true});
     });
   }
