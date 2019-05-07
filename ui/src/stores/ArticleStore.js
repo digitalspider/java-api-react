@@ -123,4 +123,4 @@ decorate(ArticleStore, {
   getArticleStatuses: action,
 });
 
-export default ArticleStore;
+export default new ArticleStore();
