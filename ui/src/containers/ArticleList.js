@@ -31,7 +31,9 @@ class ArticleList extends Component {
       this.setState({articles: articles});
       this.setState({fetchComplete: true});
     }).catch((err) => {
-      console.log(`Error getting ArticleList data: ${err}`);
+      const msg = `Error loading ArticleList data: ${err}`;
+      console.log(msg);
+      this.props.notifier.displayError('Error On Load', msg);
       this.setState({articles: []});
       this.setState({fetchComplete: true});
     });
@@ -60,4 +62,4 @@ class ArticleList extends Component {
   }
 }
 
-export default inject('articles')(observer(withStyles(styles)(ArticleList)));
+export default inject('articles', 'notifier')(observer(withStyles(styles)(ArticleList)));
