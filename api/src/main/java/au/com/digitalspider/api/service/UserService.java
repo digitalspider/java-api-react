@@ -7,7 +7,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
@@ -31,7 +32,7 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private RoleService roleService;
 
-	private static final Logger LOG = Logger.getLogger(UserService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
 	public User init(User user) {
 		return user;
@@ -43,8 +44,7 @@ public class UserService implements UserDetailsService {
 			User user = findByUsername(username);
 			SecurityUserDetails securityUserDetails = new SecurityUserDetails(user);
 			return securityUserDetails;
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			throw new UsernameNotFoundException(e.getMessage());
 		}
 	}
@@ -52,16 +52,19 @@ public class UserService implements UserDetailsService {
 	public List<User> search(String searchTerm) {
 		List<User> users = userRepository.findAll();
 		final String searchTermLc = searchTerm.toLowerCase();
-		return users.stream().filter(user -> user.getEmail().toLowerCase().indexOf(searchTermLc) > 0 ||
-				user.getUsername().toLowerCase().indexOf(searchTermLc) > 0).map(user -> init(user)).collect(Collectors.toList());
+		return users.stream()
+				.filter(user -> user.getEmail().toLowerCase().indexOf(searchTermLc) > 0
+						|| user.getUsername().toLowerCase().indexOf(searchTermLc) > 0)
+				.map(user -> init(user)).collect(Collectors.toList());
 	}
 
 	public List<User> getAll() {
 		if (isAdmin()) {
-			return userRepository.findAll().stream().map(userInStream -> init(userInStream)).collect(Collectors.toList());
-		}
-		else {
-			return Arrays.asList(getCurrentUser()).stream().map(userInStream -> init(userInStream)).collect(Collectors.toList());
+			return userRepository.findAll().stream().map(userInStream -> init(userInStream))
+					.collect(Collectors.toList());
+		} else {
+			return Arrays.asList(getCurrentUser()).stream().map(userInStream -> init(userInStream))
+					.collect(Collectors.toList());
 		}
 	}
 
@@ -72,8 +75,7 @@ public class UserService implements UserDetailsService {
 				return user;
 			}
 			return init(user);
-		}
-		catch (EmptyResultDataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			throw new IllegalArgumentException(String.format("User with username %s already exists", username));
 		}
 	}
@@ -85,8 +87,7 @@ public class UserService implements UserDetailsService {
 				return user;
 			}
 			return init(user);
-		}
-		catch (EmptyResultDataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			throw new IllegalArgumentException(String.format("User with email %s already exists", email));
 		}
 	}
@@ -94,7 +95,8 @@ public class UserService implements UserDetailsService {
 	public User create(User user) {
 		User existingUser = findByUsername(user.getUsername());
 		if (existingUser != null) {
-			throw new IllegalArgumentException(String.format("User with username %s already exists", user.getUsername()));
+			throw new IllegalArgumentException(
+					String.format("User with username %s already exists", user.getUsername()));
 		}
 		existingUser = findByEmail(user.getEmail());
 		if (existingUser != null) {
@@ -158,7 +160,8 @@ public class UserService implements UserDetailsService {
 
 	public boolean hasRole(String roleName) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (StreamSupport.stream(auth.getAuthorities().spliterator(), false).filter(role -> role.getAuthority().equalsIgnoreCase(roleName)).count() > 0) {
+		if (StreamSupport.stream(auth.getAuthorities().spliterator(), false)
+				.filter(role -> role.getAuthority().equalsIgnoreCase(roleName)).count() > 0) {
 			return true;
 		}
 		return false;

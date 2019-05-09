@@ -89,6 +89,7 @@ class Api {
   parseResponse(response, result) {
     // Any status differnt from success, unauthorized or business logic error,
     // is considered an internal error
+    console.log('res='+response.status);
     if (
       (response.status < 200 || response.status > 299) &&
       response.status !== 401 &&

@@ -7,7 +7,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,29 +22,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
+	private String corsUrl;
+
 	private AuthenticationManager authenticationManager;
-	private static final Logger LOG = Logger.getLogger(JWTLoginFilter.class);
 
-	protected JWTLoginFilter(String defaultFilterProcessesUrl) {
+	private static final Logger LOG = LoggerFactory.getLogger(JWTLoginFilter.class);
+
+	public JWTLoginFilter(String corsUrl, String defaultFilterProcessesUrl,
+			AuthenticationManager authenticationManager) {
 		super(defaultFilterProcessesUrl);
-	}
-
-	public JWTLoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager) {
-		this(defaultFilterProcessesUrl);
+		super.setAuthenticationManager(authenticationManager);
 		this.authenticationManager = authenticationManager;
+		this.corsUrl = corsUrl;
 		// return AbstractAuthenticationProcessingFilter (AntPathRequestMatcher(s))
 	}
 
 	@Override
-	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws JsonParseException, JsonMappingException, IOException {
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+			throws JsonParseException, JsonMappingException, IOException {
 		// Form based input
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		AccountCredentials cred = null;
 		if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)) {
 			cred = new AccountCredentials(username, password);
-		}
-		else {
+		} else {
 			// JSON based body input
 			ObjectMapper objectMapper = new ObjectMapper();
 			cred = objectMapper.readValue(request.getInputStream(), AccountCredentials.class);
@@ -51,16 +54,13 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 		LOG.debug("cred=" + cred);
 
-		return authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-						cred.getUsername(),
-						cred.getPassword(),
-						new ArrayList<GrantedAuthority>()));
+		return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(cred.getUsername(),
+				cred.getPassword(), new ArrayList<GrantedAuthority>()));
 	}
 
 	@Override
-	public void successfulAuthentication(HttpServletRequest req,
-			HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException {
-		JWTUtils.addAuthentication(res, ((SecurityUserDetails) auth.getPrincipal()).getUser());
+	public void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
+			Authentication auth) throws IOException {
+		JWTUtils.addAuthentication(res, ((SecurityUserDetails) auth.getPrincipal()).getUser(), corsUrl);
 	}
 }

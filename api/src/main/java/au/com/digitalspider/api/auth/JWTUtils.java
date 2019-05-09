@@ -9,10 +9,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,10 +27,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JWTUtils {
 	private static Long expiration = 1L; // 1 hour
 	private static String secret = "Kotlin"; // TODO: Change this!
-	private static String header = "Authorization";
-	private static String url = "http://localhost:8080";
 
-	private static Logger LOG = Logger.getLogger(JWTUtils.class);
+	private static Logger LOG = LoggerFactory.getLogger(JWTUtils.class);
 
 	private static String createJwt(User user) {
 		Map<String, Object> claims = new HashMap<String, Object>();
@@ -42,21 +40,18 @@ public class JWTUtils {
 		return token;
 	}
 
-	public static void addAuthentication(HttpServletResponse response, User user) throws IOException {
+	public static void addAuthentication(HttpServletResponse response, User user, String corsUrl) throws IOException {
 		String jwt = createJwt(user);
-		response.setHeader("Access-Control-Allow-Origin", url);
+		response.setHeader("Access-Control-Allow-Origin", corsUrl);
 		response.getWriter().write(jwt);
 		response.getWriter().flush();
 		response.getWriter().close();
 	}
 
-	public static Authentication getAuthentication(HttpServletRequest request) {
-		String token = request.getHeader(header);
+	public static Authentication getAuthentication(String token) {
+		LOG.debug("getAuthentication()");
 		if (StringUtils.isEmpty(token)) {
 			return null;
-		}
-		if (token.startsWith("Bearer ")) {
-			token = token.substring(7);
 		}
 		LOG.debug("token=" + token);
 

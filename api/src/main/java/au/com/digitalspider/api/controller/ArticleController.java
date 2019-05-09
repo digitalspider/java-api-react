@@ -43,7 +43,8 @@ public class ArticleController {
 
 	@GetMapping("/title/length/{titleLength}")
 	private Iterable<Article> findByTitleLength(@PathVariable(value = "titleLength") int titleLength) {
-		return articleService.getAll().stream().filter(article -> article.getTitleLength() >= titleLength).collect(Collectors.toList());
+		return articleService.getAll().stream().filter(article -> article.getTitleLength() >= titleLength)
+				.collect(Collectors.toList());
 	}
 
 	@GetMapping("/search/{searchTerm}")
@@ -55,8 +56,7 @@ public class ArticleController {
 	private ResponseEntity<?> create(@Valid @RequestBody Article article) {
 		try {
 			return ResponseEntity.ok(articleService.create(article));
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			HttpStatus status = HttpStatus.PRECONDITION_FAILED;
 			Error error = new Error(status.value(), e.getMessage());
 			return ResponseEntity.status(status).body(error);
@@ -68,8 +68,7 @@ public class ArticleController {
 		try {
 			Article article = articleService.findById(articleId);
 			return ResponseEntity.ok(article);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -80,8 +79,7 @@ public class ArticleController {
 		try {
 			Article updatedArticle = articleService.update(articleId, newArticle);
 			return ResponseEntity.ok().body(updatedArticle);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -91,8 +89,7 @@ public class ArticleController {
 		try {
 			articleService.delete(articleId);
 			return ResponseEntity.ok().build();
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
