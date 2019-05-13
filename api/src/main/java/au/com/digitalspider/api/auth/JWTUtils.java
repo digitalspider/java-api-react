@@ -40,10 +40,15 @@ public class JWTUtils {
 		return token;
 	}
 
-	public static void addAuthentication(HttpServletResponse response, User user, String corsUrl) throws IOException {
+	public static void addAuthentication(HttpServletResponse response, User user, String corsUrl,
+			String responseStringTemplate) throws IOException {
 		String jwt = createJwt(user);
+		String responseValue = jwt;
+		if (!StringUtils.isEmpty(responseStringTemplate)) {
+			responseValue = String.format(responseStringTemplate, jwt);
+		}
 		response.setHeader("Access-Control-Allow-Origin", corsUrl);
-		response.getWriter().write(jwt);
+		response.getWriter().write(responseValue);
 		response.getWriter().flush();
 		response.getWriter().close();
 	}

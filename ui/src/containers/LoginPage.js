@@ -5,6 +5,8 @@ import Section from '../components/common/Section';
 import { Input, Button, Grid } from '@material-ui/core';
 import Api from '../utils/Api';
 
+const BASE_URL=process.env.REACT_APP_BASE_URL;
+
 const styles = (theme) => ({
   section: {
     padding: '15px 0',
@@ -12,14 +14,24 @@ const styles = (theme) => ({
 });
 
 class LoginPage extends Component {
-  handleLogin() {
+  async handleLogin() {
     let username = 'admin';
     let password = 'admin';
     let data = {
       username: username,
       password: password,
     }
-    Api.post('/user/login', data);
+    let response = await Api.post(BASE_URL+'/user/login', data);
+    console.log('resp='+JSON.stringify(response));
+    if (response.status===200) {
+      console.log('All good');
+      window.push('/');
+    } else if (response.status===401) {
+      console.log('Invalid login!!!');
+    } else {
+      console.log(response);
+    }
+
   }
 
   render() {
@@ -31,10 +43,10 @@ class LoginPage extends Component {
         </Typography>
         <Grid>
           <Grid item>
-            <Input inputType='text' placeholder='Username' value=''/>
+            <Input inputType='text' placeholder='Username'/>
           </Grid>
           <Grid item>
-            <Input inputType='password' placeholder='Password' value=''/>
+            <Input inputType='password' placeholder='Password'/>
           </Grid>
         </Grid>
         <Button

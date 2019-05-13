@@ -41,6 +41,7 @@ public class UserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) {
 		try {
+			LOG.debug("loadUserByUsername() username=" + username);
 			User user = findByUsername(username);
 			SecurityUserDetails securityUserDetails = new SecurityUserDetails(user);
 			return securityUserDetails;

@@ -61,6 +61,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	public void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
 			Authentication auth) throws IOException {
-		JWTUtils.addAuthentication(res, ((SecurityUserDetails) auth.getPrincipal()).getUser(), corsUrl);
+		String responseStringTemplate = "{\"status\": \"200\", \"data\": \"%s\"}";
+		JWTUtils.addAuthentication(res, ((SecurityUserDetails) auth.getPrincipal()).getUser(), corsUrl,
+				responseStringTemplate);
 	}
 }

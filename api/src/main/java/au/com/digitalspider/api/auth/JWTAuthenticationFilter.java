@@ -45,6 +45,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 				((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				return;
 			}
+			LOG.debug("auth=" + authentication);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			filterChain.doFilter(request, response);
 		} catch (ExpiredJwtException e) {
