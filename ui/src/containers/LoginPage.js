@@ -18,25 +18,22 @@ class LoginPage extends Component {
   constructor(){
     super();
     this.state = {
-      username : '',
-      password : '',
+      auth: {
+        username : '',
+        password : '',
+      },
     }
   }
 
   handleLogin = async () => {
-    // let username = 'admin';
-    // let password = 'admin';
-    let data = {
-      username: this.state.username,
-      password: this.state.password,
-    }
+    let data = this.state.auth;
     let response = await Api.post(BASE_URL+'/user/login', data);
     console.log('resp='+JSON.stringify(response));
     if (response.status===200) {
       console.log('New token='+response.data.token);
       console.log('User='+response.data.username);
       Storage.setSession(response.data);
-      window.push('/');
+      this.props.history.push('/');
     } else if (response.status===401) {
       console.log('Invalid login!!!');
     } else {
@@ -44,12 +41,16 @@ class LoginPage extends Component {
     }
   }
 
-  handleUsername = (event) => {
-    this.setState({username : event.target.value})
-  }
-
-  handlePassword = (event) => {
-    this.setState({password : event.target.value})
+  handleInput = (event) => {
+    let value = event.target.value;
+    let name = event.target.name;
+    this.setState( prevState => {
+       return { 
+          auth : {
+            ...prevState.auth, [name]: value
+          }
+       }
+    });
   }
 
   render() {
@@ -61,10 +62,10 @@ class LoginPage extends Component {
         </Typography>
         <Grid>
           <Grid item>
-            <Input inputType='text' placeholder='Username' onChange={this.handleUsername}/>
+            <Input type='text' name="username" placeholder='Username' onChange={this.handleInput}/>
           </Grid>
           <Grid item>
-            <Input inputType='password' placeholder='Password' onChange={this.handlePassword}/>
+            <Input type='password' name="password" placeholder='Password' onChange={this.handleInput}/>
           </Grid>
         </Grid>
         <Button

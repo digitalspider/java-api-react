@@ -40,7 +40,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 			Authentication authentication = JWTUtils.getAuthentication(token);
 			if (authentication == null) {
 				LOG.debug("JWT Authentication is null. 401 response.");
-				String jsonResponse = String.format("{\"error\": \"Missing parameter %s\"}", authHeader);
+				String jsonResponse = String.format("{\"message\": \"Missing parameter %s\"}", authHeader);
 				((HttpServletResponse) response).getOutputStream().println(jsonResponse);
 				((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				return;
@@ -51,7 +51,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 		} catch (ExpiredJwtException e) {
 			LOG.debug("JWT Authentication token is expired. 401 response.");
 			LOG.error("Token has expired. " + e.getMessage());
-			String jsonResponse = "{\"error\": \"Token has expired\"}";
+			String jsonResponse = "{\"message\": \"Token has expired\"}";
 			((HttpServletResponse) response).getOutputStream().println(jsonResponse);
 			((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			return;

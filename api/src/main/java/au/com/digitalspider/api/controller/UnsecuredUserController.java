@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import au.com.digitalspider.api.io.Error;
+import au.com.digitalspider.api.io.Response;
 import au.com.digitalspider.api.model.User;
 import au.com.digitalspider.api.service.UserService;
 import io.swagger.annotations.Api;
@@ -26,19 +26,20 @@ public class UnsecuredUserController {
 	private UserService userService;
 
 	@PostMapping("/register")
-	public ResponseEntity<?> register(@Valid @RequestBody User user) {
+	public ResponseEntity<Response> register(@Valid @RequestBody User user) {
 		try {
-			return ResponseEntity.ok(userService.create(user));
-		}
-		catch (IllegalArgumentException e) {
+			User updatedUser = userService.create(user);
+			HttpStatus status = HttpStatus.OK;
+			Response body = new Response(status.value(), "register new user", updatedUser);
+			return ResponseEntity.status(status).body(body);
+		} catch (IllegalArgumentException e) {
 			HttpStatus status = HttpStatus.PRECONDITION_FAILED;
-			Error error = new Error(status.value(), e.getMessage());
-			return ResponseEntity.status(status).body(error);
-		}
-		catch (Exception e) {
+			Response body = new Response(status.value(), e.getMessage());
+			return ResponseEntity.status(status).body(body);
+		} catch (Exception e) {
 			HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-			Error error = new Error(status.value(), e.getMessage());
-			return ResponseEntity.status(status).body(error);
+			Response body = new Response(status.value(), e.getMessage());
+			return ResponseEntity.status(status).body(body);
 		}
 	}
 }

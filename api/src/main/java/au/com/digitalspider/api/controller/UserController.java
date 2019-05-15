@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import au.com.digitalspider.api.Constants;
-import au.com.digitalspider.api.io.Error;
+import au.com.digitalspider.api.io.Response;
 import au.com.digitalspider.api.model.User;
 import au.com.digitalspider.api.service.UserService;
 import io.swagger.annotations.Api;
@@ -46,8 +46,7 @@ public class UserController {
 	private ResponseEntity<User> findByUsername(@PathVariable(value = "username") String username) {
 		try {
 			return ResponseEntity.ok(userService.findByUsername(username));
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -56,8 +55,7 @@ public class UserController {
 	public ResponseEntity<User> findByEmail(@PathVariable(value = "email") String email) {
 		try {
 			return ResponseEntity.ok(userService.findByEmail(email));
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -68,15 +66,16 @@ public class UserController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<?> create(@Valid @RequestBody User user) {
+	public ResponseEntity<Response> create(@Valid @RequestBody User user) {
 		try {
 			User updatedUser = userService.create(user);
-			return ResponseEntity.ok(updatedUser);
-		}
-		catch (IllegalArgumentException e) {
+			HttpStatus status = HttpStatus.OK;
+			Response body = new Response(status.value(), "Create new user", updatedUser);
+			return ResponseEntity.status(status).body(body);
+		} catch (IllegalArgumentException e) {
 			HttpStatus status = HttpStatus.PRECONDITION_FAILED;
-			Error error = new Error(status.value(), e.getMessage());
-			return ResponseEntity.status(status).body(error);
+			Response body = new Response(status.value(), e.getMessage());
+			return ResponseEntity.status(status).body(body);
 		}
 	}
 
@@ -85,21 +84,18 @@ public class UserController {
 		try {
 			User user = userService.findById(userId);
 			return ResponseEntity.ok(user);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
 
 	@PutMapping("/{id}")
 	@Secured("ROLE_ADMIN")
-	public ResponseEntity<User> update(@PathVariable(value = "id") Long userId,
-			@Valid @RequestBody User newUser) {
+	public ResponseEntity<User> update(@PathVariable(value = "id") Long userId, @Valid @RequestBody User newUser) {
 		try {
 			User updatedUser = userService.update(userId, newUser);
 			return ResponseEntity.ok().body(updatedUser);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -110,8 +106,7 @@ public class UserController {
 		try {
 			userService.delete(userId);
 			return ResponseEntity.ok().build();
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}

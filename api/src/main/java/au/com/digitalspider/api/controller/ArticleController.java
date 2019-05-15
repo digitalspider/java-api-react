@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import au.com.digitalspider.api.Constants;
-import au.com.digitalspider.api.io.Error;
+import au.com.digitalspider.api.io.Response;
 import au.com.digitalspider.api.model.Article;
 import au.com.digitalspider.api.service.ArticleService;
 
@@ -32,8 +32,17 @@ public class ArticleController {
 	private ArticleService articleService;
 
 	@GetMapping("")
-	private List<Article> getAll() {
-		return articleService.getAll();
+	private ResponseEntity<Response> getAll() {
+		try {
+			List<Article> articles = articleService.getAll();
+			HttpStatus status = HttpStatus.OK;
+			Response body = new Response(status.value(), "Get all articles", articles);
+			return ResponseEntity.status(status).body(body);
+		} catch (Exception e) {
+			HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+			Response body = new Response(status.value(), e.getMessage());
+			return ResponseEntity.status(status).body(body);
+		}
 	}
 
 	@GetMapping("/title/{title}")
@@ -53,13 +62,16 @@ public class ArticleController {
 	}
 
 	@PostMapping("")
-	private ResponseEntity<?> create(@Valid @RequestBody Article article) {
+	private ResponseEntity<Response> create(@Valid @RequestBody Article article) {
 		try {
-			return ResponseEntity.ok(articleService.create(article));
+			Article updatedArticle = articleService.create(article);
+			HttpStatus status = HttpStatus.OK;
+			Response body = new Response(status.value(), "create new article", updatedArticle);
+			return ResponseEntity.status(status).body(body);
 		} catch (IllegalArgumentException e) {
 			HttpStatus status = HttpStatus.PRECONDITION_FAILED;
-			Error error = new Error(status.value(), e.getMessage());
-			return ResponseEntity.status(status).body(error);
+			Response body = new Response(status.value(), e.getMessage());
+			return ResponseEntity.status(status).body(body);
 		}
 	}
 

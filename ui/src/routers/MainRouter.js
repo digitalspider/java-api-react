@@ -7,7 +7,7 @@ class MainRouter extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path="/login" component={LoginPage} />
+        <Route path="/login" component={LoginPage}/>
         <Route path="/" component={Main} />
       </Switch>
     );

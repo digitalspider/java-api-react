@@ -59,6 +59,9 @@ public class JWTUtils {
 		if (StringUtils.isEmpty(token)) {
 			return null;
 		}
+		if (token.indexOf('.') < 0) {
+			return null;
+		}
 		LOG.debug("token=" + token);
 
 		Claims tokenBody = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
