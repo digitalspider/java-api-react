@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Section from '../components/common/Section';
 import { Input, Button, Grid } from '@material-ui/core';
 import Api from '../utils/Api';
+import Storage from '../utils/Storage';
 
 const BASE_URL=process.env.REACT_APP_BASE_URL;
 
@@ -14,24 +15,41 @@ const styles = (theme) => ({
 });
 
 class LoginPage extends Component {
-  async handleLogin() {
-    let username = 'admin';
-    let password = 'admin';
+  constructor(){
+    super();
+    this.state = {
+      username : '',
+      password : '',
+    }
+  }
+
+  handleLogin = async () => {
+    // let username = 'admin';
+    // let password = 'admin';
     let data = {
-      username: username,
-      password: password,
+      username: this.state.username,
+      password: this.state.password,
     }
     let response = await Api.post(BASE_URL+'/user/login', data);
     console.log('resp='+JSON.stringify(response));
     if (response.status===200) {
-      console.log('All good');
+      console.log('New token='+response.data.token);
+      console.log('User='+response.data.username);
+      Storage.setSession(response.data);
       window.push('/');
     } else if (response.status===401) {
       console.log('Invalid login!!!');
     } else {
       console.log(response);
     }
+  }
 
+  handleUsername = (event) => {
+    this.setState({username : event.target.value})
+  }
+
+  handlePassword = (event) => {
+    this.setState({password : event.target.value})
   }
 
   render() {
@@ -43,10 +61,10 @@ class LoginPage extends Component {
         </Typography>
         <Grid>
           <Grid item>
-            <Input inputType='text' placeholder='Username'/>
+            <Input inputType='text' placeholder='Username' onChange={this.handleUsername}/>
           </Grid>
           <Grid item>
-            <Input inputType='password' placeholder='Password'/>
+            <Input inputType='password' placeholder='Password' onChange={this.handlePassword}/>
           </Grid>
         </Grid>
         <Button

@@ -45,8 +45,9 @@ public class JWTUtils {
 		String jwt = createJwt(user);
 		String responseValue = jwt;
 		if (!StringUtils.isEmpty(responseStringTemplate)) {
-			responseValue = String.format(responseStringTemplate, jwt);
+			responseValue = String.format(responseStringTemplate, jwt, user.getUsername());
 		}
+		LOG.debug("responseValue=" + responseValue);
 		response.setHeader("Access-Control-Allow-Origin", corsUrl);
 		response.getWriter().write(responseValue);
 		response.getWriter().flush();
