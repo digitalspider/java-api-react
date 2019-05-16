@@ -32,17 +32,13 @@ class Api {
   }
 
   async get(url) {
-    console.log('get token='+Storage.getSessionAttr('token')+' url='+url);
     this.headers.set('Authorization', Storage.getSessionAttr('token'));
-    console.log('get headers='+JSON.stringify(this.headers));
     let options = {
       method: 'GET',
       headers: this.headers,
     };
     const response = await fetch(url, options);
-    console.log('resp='+response);
     const result = await response.json();
-    console.log('result='+result);
     return this.parseResponse(response, result);
   }
 

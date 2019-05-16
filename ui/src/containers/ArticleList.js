@@ -18,7 +18,7 @@ class ArticleList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      articles: {},
+      articles: [],
       fetchComplete: false,
     };
   }
@@ -28,7 +28,7 @@ class ArticleList extends Component {
       this.props.articles.getArticles(),
       // this.props.users.all(),
     ]).then((articles) => {
-      this.setState({articles: articles});
+      this.setState({articles: articles[0]}); // Unwrap the array from store!
       this.setState({fetchComplete: true});
     }).catch((err) => {
       const msg = `Error loading ArticleList data: ${err}`;

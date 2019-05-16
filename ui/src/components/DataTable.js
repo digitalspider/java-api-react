@@ -64,7 +64,8 @@ class DataTable extends Component {
    * and setup paginate.
    */
   getData() {
-    this.setState({data: toJS(this.props.data)});
+    let data = toJS(this.props.data);
+    this.setState({data: data});
     this.setState({paginate:
       this.state.paginate || this.state.data.length > this.state.rowsPerPage});
   };
@@ -149,13 +150,12 @@ class DataTable extends Component {
             </TableHead>
             <TableBody>
               {data
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .slice(page * rowsPerPage, (page+1) * rowsPerPage)
                   .map((item) => (
                     <DataRow
                       key={item.id}
                       data={item}
-                      isEditable={this.props.title !== 'Completed'
-                      }
+                      isEditable={true}
                     />
                   ))}
             </TableBody>
