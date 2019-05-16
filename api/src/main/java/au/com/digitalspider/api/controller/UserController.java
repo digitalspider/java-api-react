@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,9 +36,18 @@ public class UserController {
 
 	@ApiOperation(value = "View a list of available users", response = List.class)
 	@GetMapping("")
-	@PreAuthorize("hasRole('ADMIN')")
-	private List<User> getAll() {
-		return userService.getAll();
+//	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Response> getAll() {
+		try {
+			List<User> users = userService.getAll();
+			HttpStatus status = HttpStatus.OK;
+			Response body = new Response(status.value(), "Get all articles", users);
+			return ResponseEntity.status(status).body(body);
+		} catch (Exception e) {
+			HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+			Response body = new Response(status.value(), e.getMessage());
+			return ResponseEntity.status(status).body(body);
+		}
 	}
 
 	@GetMapping("/username/{username}")

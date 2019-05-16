@@ -32,7 +32,7 @@ public class ArticleController {
 	private ArticleService articleService;
 
 	@GetMapping("")
-	private ResponseEntity<Response> getAll() {
+	public ResponseEntity<Response> getAll() {
 		try {
 			List<Article> articles = articleService.getAll();
 			HttpStatus status = HttpStatus.OK;
@@ -46,23 +46,23 @@ public class ArticleController {
 	}
 
 	@GetMapping("/title/{title}")
-	private Iterable<Article> findByTitle(@PathVariable(value = "title") String title) {
+	public Iterable<Article> findByTitle(@PathVariable(value = "title") String title) {
 		return articleService.findByTitle(title);
 	}
 
 	@GetMapping("/title/length/{titleLength}")
-	private Iterable<Article> findByTitleLength(@PathVariable(value = "titleLength") int titleLength) {
+	public Iterable<Article> findByTitleLength(@PathVariable(value = "titleLength") int titleLength) {
 		return articleService.getAll().stream().filter(article -> article.getTitleLength() >= titleLength)
 				.collect(Collectors.toList());
 	}
 
 	@GetMapping("/search/{searchTerm}")
-	private Iterable<Article> search(@PathVariable(value = "searchTerm") String searchTerm) {
+	public Iterable<Article> search(@PathVariable(value = "searchTerm") String searchTerm) {
 		return articleService.search(searchTerm);
 	}
 
 	@PostMapping("")
-	private ResponseEntity<Response> create(@Valid @RequestBody Article article) {
+	public ResponseEntity<Response> create(@Valid @RequestBody Article article) {
 		try {
 			Article updatedArticle = articleService.create(article);
 			HttpStatus status = HttpStatus.OK;
@@ -76,7 +76,7 @@ public class ArticleController {
 	}
 
 	@GetMapping("/{id}")
-	private ResponseEntity<Article> get(@PathVariable(value = "id") Long articleId) {
+	public ResponseEntity<Article> get(@PathVariable(value = "id") Long articleId) {
 		try {
 			Article article = articleService.findById(articleId);
 			return ResponseEntity.ok(article);

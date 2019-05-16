@@ -19,6 +19,7 @@ class ArticleList extends Component {
     super(props);
     this.state = {
       articles: [],
+      users: [],
       fetchComplete: false,
     };
   }
@@ -26,9 +27,10 @@ class ArticleList extends Component {
   componentDidMount() {
     Promise.all([
       this.props.articles.getArticles(),
-      // this.props.users.all(),
-    ]).then((articles) => {
-      this.setState({articles: articles[0]}); // Unwrap the array from store!
+      this.props.users.getUsers(),
+    ]).then((result) => {
+      this.setState({articles: result[0]});
+      this.setState({users: result[1]});
       this.setState({fetchComplete: true});
     }).catch((err) => {
       const msg = `Error loading ArticleList data: ${err}`;
@@ -62,4 +64,4 @@ class ArticleList extends Component {
   }
 }
 
-export default inject('articles', 'notifier')(observer(withStyles(styles)(ArticleList)));
+export default inject('articles', 'users', 'notifier')(observer(withStyles(styles)(ArticleList)));
