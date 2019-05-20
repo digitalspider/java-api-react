@@ -10,7 +10,9 @@ const Error404 = () => {
 
 const MainRouter = () => (
   <Switch>
+    <Route path="/user/:id" component={UserPage}/>
     <Route path="/user" component={UserPage}/>
+    <Route path="/article/:id" component={ArticlePage}/>
     <Route path="/article" component={ArticlePage}/>
     <Route path="/" component={ArticleList}/>
     <Route component={Error404} />
