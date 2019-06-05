@@ -1,0 +1,50 @@
+version: '3.3'
+
+services:
+  postgres_db:
+    image: postgres:10-alpine
+    restart: on-failure
+    environment:
+      POSTGRES_USER: 'myapp'
+      POSTGRES_PASSWORD: 'myapp'
+      POSTGRES_DB: 'myapp'
+    ports:
+      - '5411:5432'
+    volumes:
+      - ./etc/sql/sql_setup.sql:/docker-entrypoint-initdb.d/sql_01_schema.sql
+      - ./etc/sql/sql_data.sql:/docker-entrypoint-initdb.d/sql_02_data.sql
+      # - database:/var/lib/postgresql/data # Use this to preserve your db on host
+    networks:
+      - myapp_network
+
+  myapp_api:
+    depends_on:
+      - postgres_db
+    build: ./api
+    image: myapp-api:latest
+    restart: on-failure
+    ports: 
+      - '9080:8080'
+    volumes:
+      - ./src/main/resources/application-docker.properties:/opt/app/application.properties
+    networks:
+      - myapp_network
+
+  myapp_ui:
+    depends_on:
+      - myapp_api
+    build: ./ui
+    image: myapp-ui:latest
+    restart: on-failure
+    ports: 
+      - '3000:80'
+    networks:
+      - myapp_network
+
+volumes:
+  database:
+
+networks:
+  myapp_network:
+    driver: bridge
+
